@@ -1,10 +1,11 @@
-const eventLog = document.getElementById("event_log");
-const submitBtn = document.getElementById("submit_query_btn");
-const queryInput = document.getElementById("query_input");
+const eventLog = document.getElementById("event-log");
+const submitBtn = document.getElementById("submit-query-btn");
+const queryInput = document.getElementById("query-input");
 
 let token;
 
-submitBtn.addEventListener("click", function() {
+submitBtn.addEventListener("click", function(e) {
+  e.preventDefault()
   const value = queryInput.value;
 
   const requestOpts = {

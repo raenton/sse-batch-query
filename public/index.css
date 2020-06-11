@@ -1,4 +1,15 @@
-#event_log {
+* {
+  box-sizing: border-box;
+}
+
+.query-form textarea {
+  width: 100%;
+  resize: none;
+}
+
+#event-log {
+  margin: 0;
+  padding: 10px;
   color: #000000;
   background-color: #F6F6F6;
 }
