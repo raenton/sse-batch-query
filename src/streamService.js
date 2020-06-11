@@ -1,13 +1,14 @@
-const {
-  base64Encode
-} = require('./utils')
-
 // TODO: clean up dead connections
 const openConnections = {}
 
 exports.registerConnection = (req, res) => {
+  const {
+    base64Encode,
+    generateToken,
+    now
+  } = req.ctx.utils
   const conn = {
-    id: base64Encode(Date.now().toString()),
+    id: base64Encode(now().toString()),
     req,
     res
   }
@@ -19,10 +20,13 @@ exports.registerConnection = (req, res) => {
     'Connection': 'keep-alive'
   })
 
-  this.write('open', res, conn.id)
+  const token = generateToken(conn.id)
+  this.write('open', res, token)
 
   return conn
 }
+
+exports.hasConnection = connectionId => Boolean(openConnections[connectionId])
 
 exports.write = (event, res, data) => {
   const serialized = JSON.stringify(data)
