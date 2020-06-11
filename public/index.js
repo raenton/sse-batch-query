@@ -2,21 +2,23 @@ const eventLog = document.getElementById("event_log");
 const submitBtn = document.getElementById("submit_query_btn");
 const queryInput = document.getElementById("query_input");
 
-let connectionId;
+let token;
 
 submitBtn.addEventListener("click", function() {
   const value = queryInput.value;
 
-  fetch("/api/events", {
+  const requestOpts = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Connection": connectionId
+      "Authorization": "Bearer " + token
     },
     body: JSON.stringify({
       query: value
     })
-  });
+  }
+
+  fetch("/api/events", requestOpts);
 })
 
 const eventSource = new EventSource("/api/events");
@@ -27,6 +29,7 @@ eventSource.addEventListener("message", function(e) {
 
 eventSource.addEventListener("open", function(e) {
   if (e.data) {
-    connectionId = e.data
+    const parsed = JSON.parse(e.data)
+    token = parsed.token
   }
 });

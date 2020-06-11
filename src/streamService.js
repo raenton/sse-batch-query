@@ -21,7 +21,8 @@ exports.registerConnection = (req, res) => {
   })
 
   const token = generateToken(conn.id)
-  this.write('open', res, token)
+
+  this.write('open', res, { token })
 
   return conn
 }
