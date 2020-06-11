@@ -4,6 +4,7 @@ const {
 } = require('./QueryQueue.js')
 const { QueryService } = require('./queryService')
 const streamService = require('./streamService')
+const utils = require('./utils')
 
 exports.createContext = () => {
   const queryService = new QueryService()
@@ -20,6 +21,7 @@ exports.createContext = () => {
   
   return {
     streamService,
-    queryQueue
+    queryQueue,
+    utils
   }
 }
