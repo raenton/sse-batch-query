@@ -25,19 +25,26 @@ exports.registerConnection = (req, res) => {
 }
 
 exports.write = (event, res, data) => {
+  const serialized = JSON.stringify(data)
   res.write('event:' + event + '\n')
-  res.write('data:' + data + '\n')
+  res.write('data:' + serialized + '\n')
   res.write('\n\n')
 }
 
-exports.writeMessage = ({ connectionId, message }) => {
+exports.writeMessage = ({ connectionId, data }) => {
   const conn = openConnections[connectionId]
   if (conn) {
-    const encodedMessage = JSON.stringify(message)
-    conn.res.write('event: message\n')
-    conn.res.write('data: ' + encodedMessage + '\n')
-    conn.res.write('\n\n')
+    this.write('message', conn.res, data)
   } else {
-    throw new Error('Can not write to a connection which does not exist')
+    throw new TypeError('Can not write to a connection which does not exist')
+  }
+}
+
+exports.writeError = ({ connectionId, error }) => {
+  const conn = openConnections[connectionId]
+  if (conn) {
+    this.write('error', conn.res, error)
+  } else {
+    throw new TypeError('Can not write to a connection which does not exist')
   }
 }
