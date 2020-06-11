@@ -3,7 +3,7 @@ exports.routeHandler = (req, res) => {
 
     switch(req.method) {
       case 'GET':
-        registerConnection(req, res)
+        req.ctx.streamService.registerConnection(req, res)
         break
       case 'POST':
   
