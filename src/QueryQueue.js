@@ -39,7 +39,6 @@ class QueryQueue extends EventEmitter {
   async _handleItem(item) {
     try {
       const result = await this.queryService.exec(item.query)
-      console.log(result)
       this.emit(QueryEvents.QUERY_COMPLETE, {
         connectionId: item.connectionId,
         data: result
