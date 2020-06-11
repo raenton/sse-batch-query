@@ -54,10 +54,14 @@ const server = http.createServer((req, res) => {
         break
     }
 
-  } else {
+  } else if (req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'text/html' })
-    const html = fs.createReadStream(path.resolve(__dirname, 'public/index.html'))
-    html.pipe(res)
+    const fileStream = fs.createReadStream(path.resolve(__dirname, 'public/index.html'))
+    fileStream.pipe(res)
+  } else if (req.url === '/index.css') {
+    res.writeHead(200, { 'Content-Type': 'text/css' })
+    const fileStream = fs.createReadStream(path.resolve(__dirname, 'public/index.css'))
+    fileStream.pipe(res)
   }
 })
 
