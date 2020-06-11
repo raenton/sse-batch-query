@@ -5,5 +5,8 @@
   "scripts": {
     "dev": "nodemon --inspect=1234 index.js"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
+  }
 }
