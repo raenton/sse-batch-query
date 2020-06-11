@@ -7,6 +7,7 @@ const {
 } = require('./src/QueryQueue.js')
 const streamService = require('./src/streamService')
 const { routeHandler } = require('./src/api')
+const { serveFile } = require('./src/staticServe')
 const { errorHandler } = require('./src/errorHandler')
 
 // instantiate a queue to push query demands to
@@ -24,16 +25,10 @@ const server = http.createServer((req, res) => {
   req.on('error', err => errorHandler(err, req, res))
   res.on('error', err => errorHandler(err, req, res))
 
-  if (req.url.split('/')[0] === 'api') {
+  if (req.url.includes('/api')) {
     routeHandler(req, res)
-  } else if (req.url === '/') {
-    res.writeHead(200, { 'Content-Type': 'text/html' })
-    const fileStream = fs.createReadStream(path.resolve(__dirname, 'public/index.html'))
-    fileStream.pipe(res)
-  } else if (req.url === '/index.css') {
-    res.writeHead(200, { 'Content-Type': 'text/css' })
-    const fileStream = fs.createReadStream(path.resolve(__dirname, 'public/index.css'))
-    fileStream.pipe(res)
+  } else {
+    serveFile(req, res)
   }
 })
 
