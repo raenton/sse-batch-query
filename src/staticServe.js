@@ -9,7 +9,6 @@ exports.serveFile = (req, res) => {
   } else {
     const urlParts = req.url.split('/')
     const filePath = path.resolve(process.cwd(), 'public/', urlParts[urlParts.length - 1])
-    console.log(filePath)
 
     fs.exists(filePath, (exists => {
       if (!exists) {
