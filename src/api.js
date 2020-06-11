@@ -16,7 +16,7 @@ exports.routeHandler = (req, res) => {
           // TODO: find another way to track connections
           const connId = req.headers['x-connection']
           const data = JSON.parse(rawData)
-          queryQueue.addQuery(connId, data.query)
+          req.ctx.queryQueue.addQuery(connId, data.query)
   
           res.writeHead(200)
           res.end()
