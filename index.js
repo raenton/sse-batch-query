@@ -6,8 +6,15 @@ const { errorHandler } = require('./src/errorHandler')
 
 const context = createContext()
 
-const server = http.createServer((req, res) => {
+const patchRequest = (req) => {
+  req.getHeader = function(header) {
+    return this.headers[header.toLowerCase()]
+  }
   req.ctx = context
+}
+
+const server = http.createServer((req, res) => {
+  patchRequest(req)
 
   req.on('error', err => errorHandler(err, req, res))
   res.on('error', err => errorHandler(err, req, res))
