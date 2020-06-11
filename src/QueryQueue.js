@@ -1,13 +1,16 @@
 const { EventEmitter } = require('events')
 
 const QueryEvents = {
-  QUERY_COMPLETE: 'queryComplete'
+  QUERY_COMPLETE: 'queryComplete',
+  QUERY_ERROR: 'queryError',
+  QUEUE_EMPTY: 'queueEmpty'
 }
 
 class QueryQueue extends EventEmitter {
 
-  constructor() {
+  constructor(queryService) {
     super()
+    this.queryService = queryService
     this.queue = []
     this.queryHandler = this.start()
   }
@@ -27,12 +30,25 @@ class QueryQueue extends EventEmitter {
   _readQueue() {
     const item = this.queue.splice(0, 1)[0]
     if (item) {
-      // perform item.query
-      const data = {
+      this._handleItem(item)
+    } else {
+      this.emit(QueryEvents.QUEUE_EMPTY)
+    }
+  }
+
+  async _handleItem(item) {
+    try {
+      const result = await this.queryService.exec(item.query)
+      console.log(result)
+      this.emit(QueryEvents.QUERY_COMPLETE, {
         connectionId: item.connectionId,
-        message: 'Query complete'
-      }
-      this.emit(QueryEvents.QUERY_COMPLETE, data)
+        data: result
+      })
+    } catch (err) {
+      this.emit(QueryEvents.QUERY_ERROR, {
+        connectionId: item.connectionId,
+        error: err
+      })
     }
   }
 
