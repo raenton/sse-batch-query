@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <title>Dynamic Data Stream Loader</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <pre id="event_log"></pre>
+    <input id="query_input" type="text" placeholder="Query..."/>
+    <button id="submit_query_btn">Submit Query</button>
+    <script type="text/javascript">
+      const eventLog = document.getElementById("event_log");
+      const submitBtn = document.getElementById("submit_query_btn");
+      const queryInput = document.getElementById("query_input");
+
+      let connectionId;
+
+      submitBtn.addEventListener("click", function() {
+        const value = queryInput.value;
+
+        fetch("/api/events", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Connection": connectionId
+          },
+          body: JSON.stringify({
+            query: value
+          })
+        });
+      })
+
+      const eventSource = new EventSource("/api/events");
+
+      eventSource.addEventListener("message", function(e) {
+        eventLog.innerText += e.data + "\n";
+      });
+
+      eventSource.addEventListener("open", function(e) {
+        if (e.data) {
+          connectionId = e.data
+        }
+      });
+
+    </script>
+  <body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "stream-n-load",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --inspect=1234 index.js"
+  },
+  "license": "MIT"
+}
