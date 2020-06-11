@@ -6,7 +6,10 @@ let token;
 
 submitBtn.addEventListener("click", function(e) {
   e.preventDefault()
-  const value = queryInput.value;
+  const value = queryInput.value
+  const queries = queryInput.value
+    .replace(/\n/ig, '')
+    .split(/(?<=;)/)
 
   const requestOpts = {
     method: "POST",
@@ -15,7 +18,7 @@ submitBtn.addEventListener("click", function(e) {
       "Authorization": "Bearer " + token
     },
     body: JSON.stringify({
-      query: value
+      queryBatch: queries
     })
   }
 

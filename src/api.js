@@ -18,12 +18,18 @@ exports.routeHandler = (req, res) => {
             rawData += chunk
           }).on('end', () => {
             const data = JSON.parse(rawData)
-            queryQueue.addQuery(connectionId, data.query)
-    
-            res.writeHead(200).end()
+            const batch = data.queryBatch
+            if (batch && batch.length > 0) {
+              queryQueue.addBatch(connectionId, batch)
+              res.writeHead(200).end()
+            } else {
+              res.writeHead(400, {
+                'Content-Type': 'text/plain'
+              }).end('You must provide an array of queries to be executed')
+            }
           })
         } else {
-          res.writeHead(400, {
+          res.writeHead(500, {
             'Content-Type': 'text/plain'
           }).end('The server has lost your connection token. Please refresh the page.')
         }

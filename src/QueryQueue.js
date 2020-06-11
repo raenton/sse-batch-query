@@ -23,8 +23,8 @@ class QueryQueue extends EventEmitter {
     clearInterval(this.queryHandler)
   }
 
-  addQuery(connectionId, query) {
-    this.queue.push({ connectionId, query })
+  addBatch(connectionId, queryBatch) {
+    this.queue.push({ connectionId, queryBatch })
   }
   
   _readQueue() {
@@ -38,11 +38,13 @@ class QueryQueue extends EventEmitter {
 
   async _handleItem(item) {
     try {
-      const result = await this.queryService.exec(item.query)
-      this.emit(QueryEvents.QUERY_COMPLETE, {
-        connectionId: item.connectionId,
-        data: result
-      })
+      for(let query of item.queryBatch) {
+        const result = await this.queryService.exec(query)
+        this.emit(QueryEvents.QUERY_COMPLETE, {
+          connectionId: item.connectionId,
+          data: result
+        })
+      }
     } catch (err) {
       this.emit(QueryEvents.QUERY_ERROR, {
         connectionId: item.connectionId,
