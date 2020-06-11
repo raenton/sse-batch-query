@@ -2,7 +2,7 @@ const {
   QueryQueue,
   QueryEvents
 } = require('./QueryQueue.js')
-const { QueryService } = require('./queryService')
+const { QueryService } = require('./QueryService')
 const streamService = require('./streamService')
 const utils = require('./utils')
 

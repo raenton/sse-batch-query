@@ -1,12 +1,18 @@
 class QueryService {
-  constructor() {
-
+  constructor(dbPool) {
+    this.pool = dbPool
   }
 
   async exec(query) {
-    return {
-      ubermensch: 'nowhere to be found'
-    }
+    return new Promise((resolve, reject) => {
+      this.pool.query(query, (error, results) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(results)
+        }
+      })
+    })
   }
 }
 
