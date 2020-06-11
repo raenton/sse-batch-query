@@ -7,10 +7,10 @@ const { errorHandler } = require('./src/errorHandler')
 
 const dbPool = mysql.createPool({
   connectionLimit : 10,
-  host            : '127.0.0.1:3307',
+  host            : 'localhost',
+  port            : 3307,
   user            : 'root',
-  password        : 'example',
-  database        : 'default'
+  password        : 'example'
 });
 
 const context = createContext(dbPool)
