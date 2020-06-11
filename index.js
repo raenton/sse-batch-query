@@ -1,10 +1,19 @@
+const mysql = require('mysql')
 const http = require('http')
 const { createContext } = require('./src/context')
 const { routeHandler } = require('./src/api')
 const { serveFile } = require('./src/staticServe')
 const { errorHandler } = require('./src/errorHandler')
 
-const context = createContext()
+const dbPool = mysql.createPool({
+  connectionLimit : 10,
+  host            : '127.0.0.1:3307',
+  user            : 'root',
+  password        : 'example',
+  database        : 'default'
+});
+
+const context = createContext(dbPool)
 
 const patchRequest = (req) => {
   req.getHeader = function(header) {

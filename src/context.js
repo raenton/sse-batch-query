@@ -6,8 +6,8 @@ const { QueryService } = require('./queryService')
 const streamService = require('./streamService')
 const utils = require('./utils')
 
-exports.createContext = () => {
-  const queryService = new QueryService()
+exports.createContext = (dbPool) => {
+  const queryService = new QueryService(dbPool)
 
   // instantiate a queue to push query demands to
   const queryQueue = new QueryQueue(queryService)
