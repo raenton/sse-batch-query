@@ -24,8 +24,12 @@ submitBtn.addEventListener("click", function() {
 const eventSource = new EventSource("/api/events");
 
 eventSource.addEventListener("message", function(e) {
-  eventLog.innerText += e.data + "\n";
+  eventLog.innerText += JSON.stringify(JSON.parse(e.data), null, 4) + "\n";
 });
+
+eventSource.addEventListener("error", function(e) {
+  eventLog.innerText += JSON.stringify(JSON.parse(e.data), null, 4) + "\n";
+})
 
 eventSource.addEventListener("open", function(e) {
   if (e.data) {
